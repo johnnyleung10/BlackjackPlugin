@@ -1,13 +1,12 @@
 package me.jonesdev.blackjackplugin.commands;
 
-import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import me.jonesdev.blackjackplugin.Blackjack;
 import me.jonesdev.blackjackplugin.BlackjackPlugin;
+import me.jonesdev.blackjackplugin.events.BlackjackGame;
 
 public class BlackjackCommand implements CommandExecutor{
 	
@@ -19,15 +18,15 @@ private BlackjackPlugin plugin;
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
-		List<String> deck = Blackjack.deckMaker();
-		Blackjack.shuffle(deck);
-		sender.sendMessage(deck.toString());
-		sender.sendMessage(Blackjack.deal(deck));
-		sender.sendMessage(Blackjack.deal(deck));
-		sender.sendMessage(Blackjack.deal(deck));
+		if (!(sender instanceof Player)) {
+			sender.sendMessage("Only players can use this command");
+			return true;
+		}
+		Player p = (Player) sender;
+		BlackjackGame bg = new BlackjackGame();
 		
-			
-	return true;
+		bg.newInventory(p);
+		return true;
 	}
 
 }

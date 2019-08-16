@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import me.jonesdev.blackjackplugin.BlackjackPlugin;
+import me.jonesdev.blackjackplugin.utils.Utils;
 
 
 public class EventsClass implements Listener{
@@ -26,6 +27,19 @@ public class EventsClass implements Listener{
 		
 		if (open == null){
 			return;
+		}
+		
+		//Detect when blackjack window is open
+		if (open.getName().equals(Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")))){
+			e.setCancelled(true);
+			
+			if (item == null || !item.hasItemMeta()){
+				return;
+			}
+			
+			if (item.getItemMeta().getDisplayName().equals(Utils.chat("&a&lStart"))&&(click.isLeftClick()||click.isRightClick())) {
+				
+			}
 		}
 	}
 	

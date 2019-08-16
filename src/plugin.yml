@@ -5,7 +5,7 @@ main: me.jonesdev.blackjackplugin.BlackjackPlugin
 description: A Minecraft GUI Blackjack Game.
 
 commands:
-   blackjack:
-      usage: /(command)
-      description: Start blackjack game
+  blackjack:
+    usage: /(command)
+    description: Start blackjack game
   
