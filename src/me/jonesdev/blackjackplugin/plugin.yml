@@ -1,0 +1,11 @@
+name: BlackjackPlugin
+version: 1.0
+author: JonesDev
+main: me.jonesdev.blackjackplugin.BlackjackPlugin
+description: A Minecraft GUI Blackjack Game.
+
+commands:
+   blackjack:
+      usage: /(command)
+      description: Start blackjack game
+  

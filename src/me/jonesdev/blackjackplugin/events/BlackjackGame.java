@@ -15,10 +15,11 @@ public class BlackjackGame implements Listener{
 	private Plugin plugin = BlackjackPlugin.getPlugin(BlackjackPlugin.class);
 	
 	public void newInventory(Player player) {
-		Inventory i = plugin.getServer().createInventory(null, 54, Utils.chat(plugin.getConfig().getString("blackjackgui_name")));
+		Inventory i = plugin.getServer().createInventory(null, 54, Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")));
+		
 	}
 	
-	ItemStack []
+	
 	
 
 }

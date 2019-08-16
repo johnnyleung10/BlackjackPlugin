@@ -1,43 +1,31 @@
 package me.jonesdev.blackjackplugin;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Blackjack {
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		String[] deck = deckMaker();
-		System.out.println(Arrays.toString(deck));
+	//Outputs a card from the top and removes from deck.
+	//Use with shuffled deck.
+	public static String deal( List<String> deck) {
+		String outputCard = deck.get(deck.size()-1);
+		deck.remove(deck.size()-1);
+		return outputCard;
 	}
 	
-	//Outputs a card and removes from deck
-	public static String deal( String[] deck, int size ) {
-		int x = (int) (Math.random()*(size-1));
-		String out = deck[x];
-		deck[x] = deck[size-1];
-		deck[size-1] = "";
-		return out;
-	}
-	
-	public static String[] deckMaker() {
+	public static List<String> deckMaker() {
 		String [] suits = {"diamonds", "clubs", "hearts", "spades"};
-		String [] out = new String [52];
+		//String [] out = new String [52];
+		List<String> output = new ArrayList();
 		//Fills Deck
 		for (int k = 0; k < 4; k++) 
         	for (int j = 0; j < 13;j++) 
-        		out[k*13+j] = ""+(j+1)+" "+suits[k];
-        return(out);
+        		output.add(k*13+j, (j+1)+" "+suits[k]);
+        return(output);
     }
 	
-	public static void shuffle( String[] deck) {
-		String [] temp = new String [52];
-		for (int k = 0; k < 52; k++) {
-			int x = (int) (Math.random()*(51-k));
-			temp[k] = deck[x];
-			deck[x] = deck[51-k];
-		}
-		for (int k = 0; k < 52; k++) {
-			deck[k]=temp[k];
-		}
+	public static void shuffle( List<String> deck) {
+		Collections.shuffle(deck);
 	}
 	
 }
