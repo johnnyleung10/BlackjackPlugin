@@ -13,7 +13,7 @@ public class FileConfig {
 	private BlackjackPlugin plugin = BlackjackPlugin.getPlugin(BlackjackPlugin.class);
 	
 	//Files and File configs here
-	public FileConfiguration blackjackcfg;
+	private static FileConfiguration blackjackcfg;
 	public File blackjackfile;
 	//----------------------------
 	
@@ -32,9 +32,24 @@ public class FileConfig {
 				Bukkit.getServer().getConsoleSender().sendMessage(Utils.chat("&cCould not create blackjack.yml file."));
 			}
 		}
-		
 		blackjackcfg = YamlConfiguration.loadConfiguration(blackjackfile);
-		Bukkit.getServer().getConsoleSender().sendMessage(Utils.chat("&2blackjack.yml file has been successfully created."));
-		
 	}
+
+	public static FileConfiguration getBlackjackFile(){
+		return blackjackcfg;
+	}
+
+	public void saveBlackjack(){
+		try{
+			blackjackcfg.save(blackjackfile);
+		} catch (IOException e){
+			Bukkit.getServer().getConsoleSender().sendMessage(Utils.chat("&cCould not save blackjack.yml file."));
+		}
+	}
+
+	public void reloadBlackjack(){
+		blackjackcfg = YamlConfiguration.loadConfiguration(blackjackfile);
+	}
+
+
 }

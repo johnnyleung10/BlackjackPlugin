@@ -27,12 +27,14 @@ public class BlackjackPlugin extends JavaPlugin{
 	
 	@Override
 	public void onDisable() {
+		cfg.saveBlackjack();
 		getServer().getConsoleSender().sendMessage(Utils.chat("&eBlackjack Plugin has been disabled."));
 	}
 	
 	public void loadConfigManager() {
 		cfg = new FileConfig();
 		cfg.setup();
+		cfg.saveBlackjack();
 	}
 	
 }

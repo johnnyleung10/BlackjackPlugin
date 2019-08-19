@@ -1,16 +1,23 @@
 package me.jonesdev.blackjackplugin.commands;
 
+import me.jonesdev.blackjackplugin.FileConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.jonesdev.blackjackplugin.BlackjackPlugin;
 import me.jonesdev.blackjackplugin.events.BlackjackGame;
 
+import java.io.File;
+
 public class BlackjackCommand implements CommandExecutor{
 	
-private BlackjackPlugin plugin;
+	private BlackjackPlugin plugin;
+
+
+
 	
 	public BlackjackCommand(BlackjackPlugin plugin) {
 		this.plugin = plugin;
