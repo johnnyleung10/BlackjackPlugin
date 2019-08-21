@@ -31,8 +31,8 @@ public class BlackjackCommand implements CommandExecutor{
 		}
 		Player p = (Player) sender;
 		BlackjackGame bg = new BlackjackGame();
-		
-		bg.newInventory(p);
+		bg.menuInventory(p);
+
 		return true;
 	}
 

@@ -2,7 +2,7 @@ name: BlackjackPlugin
 version: 1.0
 author: JonesDev
 main: me.jonesdev.blackjackplugin.BlackjackPlugin
-description: A Minecraft GUI Blackjack Game.
+description: Minecraft Inventory GUI Based Blackjack Game.
 
 commands:
   blackjack:

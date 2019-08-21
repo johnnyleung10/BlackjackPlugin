@@ -14,7 +14,7 @@ public class FileConfig {
 	
 	//Files and File configs here
 	private static FileConfiguration blackjackcfg;
-	public File blackjackfile;
+	public static File blackjackfile;
 	//----------------------------
 	
 	
@@ -39,7 +39,7 @@ public class FileConfig {
 		return blackjackcfg;
 	}
 
-	public void saveBlackjack(){
+	public static void saveBlackjack(){
 		try{
 			blackjackcfg.save(blackjackfile);
 		} catch (IOException e){
