@@ -22,9 +22,8 @@ public class BlackjackPlugin extends JavaPlugin{
 		
 		getServer().getConsoleSender().sendMessage(Utils.chat("&eBlackjack Plugin is successfully enabled."));
 		getServer().getPluginManager().registerEvents(new EventsClass(), this);
-		
 	}
-	
+
 	@Override
 	public void onDisable() {
 		cfg.saveBlackjack();

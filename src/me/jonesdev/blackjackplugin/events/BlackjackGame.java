@@ -4,9 +4,7 @@ import me.jonesdev.blackjackplugin.Blackjack;
 import me.jonesdev.blackjackplugin.BlackjackPlugin;
 import me.jonesdev.blackjackplugin.FileConfig;
 import me.jonesdev.blackjackplugin.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -16,7 +14,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
 import java.util.List;
 
 public class BlackjackGame implements Listener{
@@ -67,18 +64,14 @@ public class BlackjackGame implements Listener{
 			ItemMeta meta = empty1.getItemMeta();
 			empty1.setItemMeta(meta);
 		}
-				
+		for(int slot = 0; slot < 18; slot++){
+			i.setItem(slot, empty1);
+		}
 		//Fill with blue glass
 		ItemStack empty2 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 3);{
 			ItemMeta meta = empty2.getItemMeta();
 			empty2.setItemMeta(meta);
 		}
-
-
-		for(int slot = 0; slot < 18; slot++){
-			i.setItem(slot, empty1);     
-		}
-				
 		for(int slot = 18; slot < i.getSize(); slot++){
 			i.setItem(slot, empty2);
 		}
@@ -90,6 +83,7 @@ public class BlackjackGame implements Listener{
 			meta.setDisplayName(Utils.chat(plugin.getConfig().getString("BlackjackGame.Dealer.Name")));
 			dealerHead.setItemMeta(meta);
 		}
+		i.setItem(0, dealerHead);
 
 		//Creates player head
 		ItemStack playerHead = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());{
@@ -98,53 +92,60 @@ public class BlackjackGame implements Listener{
 			meta.setDisplayName(Utils.chat("&6Player "+player.getName()));
 			playerHead.setItemMeta(meta);
 		}
+		i.setItem(18, playerHead);
 
-		ItemStack bet5 = new ItemStack(Material.INK_SACK, 1, (byte) 1);{
+		//Betting Chips
+		ItemStack bet5 = new ItemStack(Material.INK_SACK, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".Chip5.Stack"), (byte) 1);{
 			ItemMeta meta = bet5.getItemMeta();
-			meta.setDisplayName(Utils.chat("&4Bet $5."));
+			meta.setDisplayName(Utils.chat("&d$5 Chip"));
 			bet5.setItemMeta(meta);
 		}
 
-		ItemStack bet25 = new ItemStack(Material.INK_SACK, 1, (byte) 14);{
+		ItemStack bet25 = new ItemStack(Material.INK_SACK, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".Chip25.Stack"), (byte) 14);{
 			ItemMeta meta = bet25.getItemMeta();
-			meta.setDisplayName(Utils.chat("&4Bet $25."));
+			meta.setDisplayName(Utils.chat("&d$25 Chip"));
 			bet25.setItemMeta(meta);
 		}
 
-		ItemStack bet100 = new ItemStack(Material.INK_SACK, 1, (byte) 11);{
+		ItemStack bet100 = new ItemStack(Material.INK_SACK, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".Chip100.Stack"), (byte) 11);{
 			ItemMeta meta = bet100.getItemMeta();
-			meta.setDisplayName(Utils.chat("&4Bet $100."));
+			meta.setDisplayName(Utils.chat("&d$100 Chip"));
 			bet100.setItemMeta(meta);
 		}
 
-		ItemStack bet500 = new ItemStack(Material.INK_SACK, 1, (byte) 2);{
+		ItemStack bet500 = new ItemStack(Material.INK_SACK, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".Chip500.Stack"), (byte) 2);{
 			ItemMeta meta = bet500.getItemMeta();
-			meta.setDisplayName(Utils.chat("&4Bet $500."));
+			meta.setDisplayName(Utils.chat("&d$500 Chip"));
 			bet500.setItemMeta(meta);
 		}
 
-		ItemStack bet1000 = new ItemStack(Material.INK_SACK, 1, (byte) 4);{
+		ItemStack bet1000 = new ItemStack(Material.INK_SACK, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".Chip1000.Stack"), (byte) 4);{
 			ItemMeta meta = bet1000.getItemMeta();
-			meta.setDisplayName(Utils.chat("&4Bet $1000."));
+			meta.setDisplayName(Utils.chat("&d$1000 Chip."));
 			bet1000.setItemMeta(meta);
 		}
 
 		//Paper that shows current bet amount
 		ItemStack betAmount = new ItemStack(Material.PAPER, 1);{
 			ItemMeta meta = betAmount.getItemMeta();
-			meta.setDisplayName(Utils.chat("&4Current Bet: $" + FileConfig.getBlackjackFile().getString(player.getUniqueId() + ".BetAmount")));
-
+			meta.setDisplayName(Utils.chat("&c&lCurrent Bet: $" + FileConfig.getBlackjackFile().getString(player.getUniqueId() + ".BetAmount")));
 			betAmount.setItemMeta(meta);
 		}
 
+		//Paper that shows current bankroll
+		ItemStack bankroll = new ItemStack(Material.PAPER, 1);{
+			ItemMeta meta = bankroll.getItemMeta();
+			meta.setDisplayName(Utils.chat("&c&lCurrent Bankroll: $" + FileConfig.getBlackjackFile().getString(player.getUniqueId() + ".Bankroll")));
+			bankroll.setItemMeta(meta);
+		}
+
+		//Button to start game and deal cards
 		ItemStack dealButton = new ItemStack(Material.BOOK, 1); {
 			ItemMeta meta = dealButton.getItemMeta();
 			meta.setDisplayName(Utils.chat("&aDeal"));
 			dealButton.setItemMeta(meta);
 		}
-		//Set Player Heads
-		i.setItem(0, dealerHead);
-		i.setItem(18, playerHead);
+
 		//Set Bet Increments
 		i.setItem(20, bet5);
 		i.setItem(21, bet25);
@@ -154,6 +155,7 @@ public class BlackjackGame implements Listener{
 		//Set Other Buttons and Controls
 		i.setItem(26, betAmount);
 		i.setItem(49, dealButton);
+		i.setItem(53, bankroll);
 
 		player.openInventory(i);
 	}
@@ -166,17 +168,14 @@ public class BlackjackGame implements Listener{
 			ItemMeta meta = empty1.getItemMeta();
 			empty1.setItemMeta(meta);
 		}
-
+		for(int slot = 0; slot < 18; slot++){
+			i.setItem(slot, empty1);
+		}
 		//Fill with blue glass
 		ItemStack empty2 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 3);{
 			ItemMeta meta = empty2.getItemMeta();
 			empty2.setItemMeta(meta);
 		}
-
-		for(int slot = 0; slot < 18; slot++){
-			i.setItem(slot, empty1);
-		}
-
 		for(int slot = 18; slot < i.getSize(); slot++){
 			i.setItem(slot, empty2);
 		}
@@ -222,7 +221,7 @@ public class BlackjackGame implements Listener{
 		}
 		//First cards dealt
 		i.setItem(28, p1);
-		i.setItem(3, d1);
+		i.setItem(1, d1);
 		i.setItem(29, p2);
 
 		//CardTotals
@@ -256,8 +255,5 @@ public class BlackjackGame implements Listener{
 
 		player.openInventory(i);
 	}
-	
-	
-	
 
 }

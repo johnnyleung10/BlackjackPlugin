@@ -1,6 +1,7 @@
 package me.jonesdev.blackjackplugin.commands;
 
 import me.jonesdev.blackjackplugin.FileConfig;
+import me.jonesdev.blackjackplugin.utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,7 +30,19 @@ public class BlackjackCommand implements CommandExecutor{
 			sender.sendMessage("Only players can use this command");
 			return true;
 		}
+
+		if (arg.length != 1){
+			sender.sendMessage(Utils.chat("&c&l[!] &cCorrect usage is /blackjack [money] "));
+			return true;
+		}
+
+		int bankroll = Integer.parseInt(arg[0]);
+
 		Player p = (Player) sender;
+		//Save Bankroll
+		FileConfig.getBlackjackFile().set(p.getUniqueId().toString()+ ".Bankroll", bankroll);
+
+		//Open GameMenu
 		BlackjackGame bg = new BlackjackGame();
 		bg.menuInventory(p);
 
