@@ -13,52 +13,54 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
 public class BlackjackGame implements Listener{
-	
+
 	private Plugin plugin = BlackjackPlugin.getPlugin(BlackjackPlugin.class);
 	public static List<String> deck;
-	
+
+
 	public void menuInventory(Player player) {
 		Inventory i = plugin.getServer().createInventory(null, 54, Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")));
-		
-		
+
+
 		ItemStack startButton = new ItemStack(Material.REDSTONE_TORCH_ON, 1);
 		ItemMeta startMeta = startButton.getItemMeta();
 		startMeta.setDisplayName(Utils.chat("&a&lStart"));
 		startButton.setItemMeta(startMeta);
-		
+
 		//Fill with green glass
 		ItemStack empty1 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 13);
 		ItemMeta empty1Meta = empty1.getItemMeta();
 		empty1.setItemMeta(empty1Meta);
-		
+
 		//Fill with blue glass
 		ItemStack empty2 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 3);
 		ItemMeta empty2Meta = empty2.getItemMeta();
 		empty2.setItemMeta(empty2Meta);
-		
-		
+
+
 		for(int slot = 0; slot < 27; slot++){
-	        if(slot!=13) {
-	        	i.setItem(slot, empty1);
-	        }
+			if(slot!=13) {
+				i.setItem(slot, empty1);
+			}
 		}
-		
+
 		for(int slot = 27; slot < i.getSize(); slot++){
-			i.setItem(slot, empty2);    
+			i.setItem(slot, empty2);
 		}
-		
+
 		i.setItem(13, startButton);
-		
+
 		player.openInventory(i);
 	}
-	
+
 	public void betInventory(Player player){
 		Inventory i = plugin.getServer().createInventory(null, 54, Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")));
-		
+
 		//Fill with green glass
 		ItemStack empty1 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 13);{
 			ItemMeta meta = empty1.getItemMeta();
@@ -160,8 +162,8 @@ public class BlackjackGame implements Listener{
 		player.openInventory(i);
 	}
 
-	public void gameInventory(Player player){
-		Inventory i = plugin.getServer().createInventory(null, 54, Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")));
+	public void gameInventory(final Player player){
+		final Inventory i = plugin.getServer().createInventory(null, 54, Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")));
 
 		//Fill with green glass
 		ItemStack empty1 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 13);{
@@ -187,7 +189,7 @@ public class BlackjackGame implements Listener{
 			meta.setDisplayName(Utils.chat(plugin.getConfig().getString("BlackjackGame.Dealer.Name")));
 			dealerHead.setItemMeta(meta);
 		}
-
+		i.setItem(0, dealerHead);
 		//Creates player head
 		ItemStack playerHead = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());{
 			SkullMeta meta = (SkullMeta) playerHead.getItemMeta();
@@ -195,36 +197,32 @@ public class BlackjackGame implements Listener{
 			meta.setDisplayName(Utils.chat("&6Player "+player.getName()));
 			playerHead.setItemMeta(meta);
 		}
-
-		//Set Player Heads
-		i.setItem(0, dealerHead);
 		i.setItem(18, playerHead);
 
-
 		//Player first card
-		ItemStack p1 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card1.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card1.Amount"));{
+		final ItemStack p1 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card1.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card1.Amount"));{
 			ItemMeta meta = p1.getItemMeta();
 			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card1.Data"))));
 			p1.setItemMeta(meta);
 		}
 		//Dealer first card
-		ItemStack d1 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card2.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card2.Amount"));{
+		final ItemStack d1 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card2.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card2.Amount"));{
 			ItemMeta meta = d1.getItemMeta();
 			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card2.Data"))));
 			d1.setItemMeta(meta);
 		}
 		//Player first card
-		ItemStack p2 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card3.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card3.Amount"));{
+		final ItemStack p2 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card3.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card3.Amount"));{
 			ItemMeta meta = p2.getItemMeta();
 			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card3.Data"))));
 			p2.setItemMeta(meta);
 		}
-		//First cards dealt
-		i.setItem(28, p1);
-		i.setItem(1, d1);
-		i.setItem(29, p2);
+
 
 		//CardTotals
+		FileConfig.getBlackjackFile().set(player.getUniqueId().toString() +".PlayerTotal", 1);
+		FileConfig.getBlackjackFile().set(player.getUniqueId().toString() +".DealerTotal", 1);
+		FileConfig.saveBlackjack();
 		ItemStack playerTotal = new ItemStack(Material.MINECART, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".PlayerTotal"));{
 			ItemMeta meta = playerTotal.getItemMeta();
 			meta.setDisplayName(Utils.chat("&DTotal"));
@@ -239,20 +237,90 @@ public class BlackjackGame implements Listener{
 		i.setItem(35, playerTotal);
 
 		//Player functions
-		ItemStack hit = new ItemStack(Material.GOLD_PLATE, 1);{
+		final ItemStack hit = new ItemStack(Material.GOLD_PLATE, 1);{
 			ItemMeta meta = hit.getItemMeta();
 			meta.setDisplayName(Utils.chat("&6Hit"));
 			hit.setItemMeta(meta);
 		}
-		ItemStack stand = new ItemStack(Material.BREWING_STAND_ITEM, 1);{
+		final ItemStack stand = new ItemStack(Material.BREWING_STAND_ITEM, 1);{
 			ItemMeta meta = stand.getItemMeta();
 			meta.setDisplayName(Utils.chat("&6Stand"));
 			stand.setItemMeta(meta);
 		}
 
-		i.setItem(48, hit);
-		i.setItem(50, stand);
+		player.openInventory(i);
 
+		//Player's first card
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				//Set cards
+				i.setItem(31, p1);
+				//Set totals
+				FileConfig.getBlackjackFile().set(player.getUniqueId().toString()+".PlayerTotal", Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card1.Data")}));
+				FileConfig.saveBlackjack();
+				ItemStack playerTotal = new ItemStack(Material.MINECART, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".PlayerTotal"));{
+					ItemMeta meta = playerTotal.getItemMeta();
+					meta.setDisplayName(Utils.chat("&DTotal"));
+					playerTotal.setItemMeta(meta);
+				}
+				i.setItem(35, playerTotal);
+			}
+
+		}.runTaskLater(plugin, 10);
+		player.openInventory(i);
+
+		//Deal dealer's first card
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				//Set cards
+				i.setItem(4, d1);
+
+				//Set totals
+				int dealerTotalNum = Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card2.Data")});
+				FileConfig.getBlackjackFile().set(player.getUniqueId().toString()+".DealerTotal", dealerTotalNum);
+				FileConfig.saveBlackjack();
+				ItemStack dealerTotal = new ItemStack(Material.MINECART, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".DealerTotal"));{
+					ItemMeta meta = dealerTotal.getItemMeta();
+					meta.setDisplayName(Utils.chat("&DTotal"));
+					dealerTotal.setItemMeta(meta);
+				}
+				i.setItem(8, dealerTotal);
+			}
+
+		}.runTaskLater(plugin, 20);
+		player.openInventory(i);
+
+		//Deal player's second card
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				//Set cards
+				i.setItem(30, i.getItem(31));
+				i.setItem(31, p2);
+
+				//Set card totals
+				int playerTotalNum = Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card1.Data"), FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card3.Data")});
+				FileConfig.getBlackjackFile().set(player.getUniqueId().toString()+".PlayerTotal", playerTotalNum);
+				FileConfig.saveBlackjack();
+				ItemStack playerTotal = new ItemStack(Material.MINECART, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".PlayerTotal"));{
+					ItemMeta meta = playerTotal.getItemMeta();
+					meta.setDisplayName(Utils.chat("&DTotal"));
+					playerTotal.setItemMeta(meta);
+				}
+				i.setItem(35, playerTotal);
+				player.updateInventory();
+
+				//Set hit and stand buttons
+				i.setItem(48, hit);
+				i.setItem(50, stand);
+
+			}
+
+		}.runTaskLater(plugin, 30);
 		player.openInventory(i);
 	}
 

@@ -4,12 +4,15 @@
 	<contentEntry url="file://$MODULE_DIR$"/>
 	<lib name="lib" scope="COMPILE">
 		<srcroot url="file://$MODULE_DIR$/lib"/>
-		<relative-module-src project-related="file://$PROJECT_DIR$/Eclipse Projects/BlackjackPlugin/lib"/>
-		<relative-module-cls project-related="file://$PROJECT_DIR$/Eclipse Projects/BlackjackPlugin/lib"/>
+		<relative-module-src project-related="file://$PROJECT_DIR$/lib"/>
+		<relative-module-cls project-related="file://$PROJECT_DIR$/lib"/>
 	</lib>
 	<lib name="spigot-1.12.2.jar" scope="COMPILE">
 		<srcroot url="jar://$MODULE_DIR$/lib/spigot-1.12.2.jar!/"/>
-		<relative-module-src project-related="jar://$PROJECT_DIR$/Eclipse Projects/BlackjackPlugin/lib/spigot-1.12.2.jar!/"/>
-		<relative-module-cls project-related="jar://$PROJECT_DIR$/Eclipse Projects/BlackjackPlugin/lib/spigot-1.12.2.jar!/"/>
+		<relative-module-src project-related="jar://$PROJECT_DIR$/lib/spigot-1.12.2.jar!/"/>
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/spigot-1.12.2.jar!/"/>
 	</lib>
+	<levels>
+		<level name="Vault" value="project"/>
+	</levels>
 </component>

@@ -2,6 +2,12 @@ BlackjackGUI:
   Title: '&5&lBlackjack'
 
 BlackjackGame:
+  #Minimum bet.
+  MinBet: 10
+
+  #Min buy in.
+  MinBuyIn: 10
+
   Dealer:
     #Playerhead, use username.
     Head: 'BruceWayne'

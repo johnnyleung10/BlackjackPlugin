@@ -8,5 +8,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib" sourcepath="lib"/>
 	<classpathentry kind="lib" path="lib/spigot-1.12.2.jar" sourcepath="lib/spigot-1.12.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Vault"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
