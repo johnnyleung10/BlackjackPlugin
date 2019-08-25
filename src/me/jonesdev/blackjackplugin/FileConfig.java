@@ -1,13 +1,12 @@
 package me.jonesdev.blackjackplugin;
 
-import java.io.File;
-import java.io.IOException;
-
+import me.jonesdev.blackjackplugin.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.jonesdev.blackjackplugin.utils.Utils;
+import java.io.File;
+import java.io.IOException;
 
 public class FileConfig {
 	private BlackjackPlugin plugin = BlackjackPlugin.getPlugin(BlackjackPlugin.class);

@@ -141,6 +141,12 @@ public class BlackjackGame implements Listener{
 			bankroll.setItemMeta(meta);
 		}
 
+		ItemStack cashout = new ItemStack(Material.GOLD_INGOT, 1);{
+			ItemMeta meta = bankroll.getItemMeta();
+			meta.setDisplayName(Utils.chat("&d&lCash Out"));
+			cashout.setItemMeta(meta);
+		}
+
 		//Button to start game and deal cards
 		ItemStack dealButton = new ItemStack(Material.BOOK, 1); {
 			ItemMeta meta = dealButton.getItemMeta();
@@ -158,6 +164,7 @@ public class BlackjackGame implements Listener{
 		i.setItem(26, betAmount);
 		i.setItem(49, dealButton);
 		i.setItem(53, bankroll);
+		i.setItem(45, cashout);
 
 		player.openInventory(i);
 	}

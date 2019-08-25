@@ -13,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -524,7 +523,7 @@ public class EventsClass implements Listener {
 
 				//Save Changes
 
-				FileConfig.getBlackjackFile().set(player.getUniqueId().toString() + ".numPlayerCards", numOfPlayerCards);
+
 				FileConfig.getBlackjackFile().set(player.getUniqueId().toString() + ".PlayerTotal", numPlayerTotal);
 				FileConfig.getBlackjackFile().set(player.getUniqueId().toString() + ".Count", count);
 				FileConfig.getBlackjackFile().set(player.getUniqueId().toString() + ".PlayerPosition", playerPosition);
@@ -569,7 +568,10 @@ public class EventsClass implements Listener {
 					stand(player, open);
 				}
 
+				//Save Number of Player Cards
 				numOfPlayerCards++;
+				FileConfig.getBlackjackFile().set(player.getUniqueId().toString() + ".numPlayerCards", numOfPlayerCards);
+				FileConfig.saveBlackjack();
 
 				player.updateInventory();
 			}
@@ -583,31 +585,23 @@ public class EventsClass implements Listener {
 				resetGame(player);
 				bg.betInventory(player);
 			}
-		}
-	}
-	@EventHandler
-	public void InvenClose(InventoryCloseEvent e){
-		Player p = (Player) e.getPlayer();
-		Inventory open = e.getInventory();
+			//Cashout
+			if (item.getItemMeta().getDisplayName().equals(Utils.chat("&d&lCash Out"))){
+				//Retrieve Bankroll
+				String temp = FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+ ".Bankroll");
+				double bankroll = Double.parseDouble(temp);
 
-		if (open.getName().equals(Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")))) {
-			//Get Money
-			double returnMoney = 0;
-			String temp = FileConfig.getBlackjackFile().getString(p.getUniqueId().toString()+ ".Bankroll");
-			double bankroll = Double.parseDouble(temp);
-			double initialBuyIn = FileConfig.getBlackjackFile().getDouble(p.getUniqueId().toString()+ ".InitialBuyIn");
-			returnMoney = Math.abs(initialBuyIn - bankroll);
-
-			EconomyResponse response = economy.depositPlayer((OfflinePlayer)p, returnMoney);
-			if (response.transactionSuccess()){
-				p.sendMessage((Utils.chat("&6&l$" +String.format("%.2f", returnMoney)) +" &3has been returned to your account."));
+				//Deposit bankroll
+				EconomyResponse response = economy.depositPlayer((OfflinePlayer) player, bankroll);
+				if (response.transactionSuccess()){
+					player.closeInventory();
+					player.sendMessage(Utils.chat("&6&l[!] &a$" +temp +" &6has been deposited into your account. Come play again!"));
+				}
+				else{
+					player.sendMessage(Utils.chat("&c&l[!] &cFailed to deposit money into your account."));
+				}
 			}
-			else{
-				p.sendMessage(Utils.chat("&c&l[ERROR] &cTransaction was not successful."));
-			}
-
 		}
-
 	}
 
 	private void setup (Player p){

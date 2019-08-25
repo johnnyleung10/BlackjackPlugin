@@ -6,7 +6,6 @@ import me.jonesdev.blackjackplugin.events.BlackjackGame;
 import me.jonesdev.blackjackplugin.utils.Utils;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -64,7 +63,6 @@ public class BlackjackCommand implements CommandExecutor{
         if (response.transactionSuccess()){
             //Save Bankroll
             FileConfig.getBlackjackFile().set(p.getUniqueId().toString()+ ".Bankroll", String.format("%.2f", bankroll));
-            FileConfig.getBlackjackFile().set(p.getUniqueId().toString()+ ".InitialBuyIn", bankroll);
 
             //Open GameMenu
             BlackjackGame bg = new BlackjackGame();
