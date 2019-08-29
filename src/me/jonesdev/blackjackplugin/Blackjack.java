@@ -1,5 +1,7 @@
 package me.jonesdev.blackjackplugin;
 
+import org.bukkit.Bukkit;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,19 +11,30 @@ public class Blackjack {
 	//Use with shuffled deck.
 	public static String deal( List<String> deck) {
 		String outputCard = deck.get(deck.size()-1);
-		deck.remove(deck.size()-1);
+
+		//If deck is finished
+		if (outputCard.equals("Refill")){
+			List<String> temp = deckMaker();
+			shuffle(temp);
+			deck.clear();
+			deck.addAll(temp);
+			outputCard = deck.get(deck.size()-1);
+		}
+		deck.remove(outputCard);
 		return outputCard;
 	}
 	
 	public static List<String> deckMaker() {
 		String [] suits = {"Diamonds", "Clubs", "Hearts", "Spades"};
-		//String [] out = new String [52];
-		List<String> output = new ArrayList();
+		List<String> deck = new ArrayList();
 		//Fills Deck
-		for (int k = 0; k < 4; k++) 
-        	for (int j = 0; j < 13;j++) 
-        		output.add(k*13+j, (j+1)+" "+suits[k]);
-        return(output);
+		for (int k = 0; k < 4; k++) {
+			for (int j = 0; j < 13; j++) {
+				deck.add(k * 13 + j, (j + 1) + " " + suits[k]);
+			}
+		}
+		deck.add(0, "Refill");
+        return(deck);
     }
 	
 	public static void shuffle(List<String> deck) {

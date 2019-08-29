@@ -6,6 +6,7 @@ import me.jonesdev.blackjackplugin.FileConfig;
 import me.jonesdev.blackjackplugin.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -123,7 +124,7 @@ public class BlackjackGame implements Listener{
 
 		ItemStack bet1000 = new ItemStack(Material.INK_SACK, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".Chip1000.Stack"), (byte) 4);{
 			ItemMeta meta = bet1000.getItemMeta();
-			meta.setDisplayName(Utils.chat("&d$1000 Chip."));
+			meta.setDisplayName(Utils.chat("&d$1000 Chip"));
 			bet1000.setItemMeta(meta);
 		}
 
@@ -141,6 +142,7 @@ public class BlackjackGame implements Listener{
 			bankroll.setItemMeta(meta);
 		}
 
+		//Cashout Button
 		ItemStack cashout = new ItemStack(Material.GOLD_INGOT, 1);{
 			ItemMeta meta = bankroll.getItemMeta();
 			meta.setDisplayName(Utils.chat("&d&lCash Out"));
@@ -150,7 +152,7 @@ public class BlackjackGame implements Listener{
 		//Button to start game and deal cards
 		ItemStack dealButton = new ItemStack(Material.BOOK, 1); {
 			ItemMeta meta = dealButton.getItemMeta();
-			meta.setDisplayName(Utils.chat("&aDeal"));
+			meta.setDisplayName(Utils.chat("&a&lDeal"));
 			dealButton.setItemMeta(meta);
 		}
 
@@ -169,8 +171,8 @@ public class BlackjackGame implements Listener{
 		player.openInventory(i);
 	}
 
-	public void gameInventory(final Player player){
-		final Inventory i = plugin.getServer().createInventory(null, 54, Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")));
+	public void gameInventory(Player player){
+		Inventory i = plugin.getServer().createInventory(null, 54, Utils.chat(plugin.getConfig().getString("BlackjackGUI.Title")));
 
 		//Fill with green glass
 		ItemStack empty1 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 13);{
@@ -206,22 +208,26 @@ public class BlackjackGame implements Listener{
 		}
 		i.setItem(18, playerHead);
 
+
 		//Player first card
-		final ItemStack p1 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card1.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card1.Amount"));{
+		int p1count = FileConfig.getBlackjackFile().getInt(player.getUniqueId() +".Cards.P1.Count");
+		ItemStack p1 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card" +p1count +".Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card" +p1count +".Amount"));{
 			ItemMeta meta = p1.getItemMeta();
-			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card1.Data"))));
+			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card" +p1count +".Data"))));
 			p1.setItemMeta(meta);
 		}
 		//Dealer first card
-		final ItemStack d1 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card2.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card2.Amount"));{
+		int d1count = FileConfig.getBlackjackFile().getInt(player.getUniqueId() +".Cards.D1.Count");
+		ItemStack d1 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card" +d1count +".Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card" +d1count +".Amount"));{
 			ItemMeta meta = d1.getItemMeta();
-			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card2.Data"))));
+			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card" +d1count +".Data"))));
 			d1.setItemMeta(meta);
 		}
-		//Player first card
-		final ItemStack p2 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card3.Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card3.Amount"));{
+		int p2count = FileConfig.getBlackjackFile().getInt(player.getUniqueId() +".Cards.P2.Count");
+		//Player second card
+		ItemStack p2 = new ItemStack(Material.getMaterial(FileConfig.getBlackjackFile().get(player.getUniqueId().toString()+".Cards.Card" +p2count +".Material").toString()), FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString()+".Cards.Card" +p2count +".Amount"));{
 			ItemMeta meta = p2.getItemMeta();
-			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card3.Data"))));
+			meta.setDisplayName(Utils.chat("&2"+Blackjack.properName(FileConfig.getBlackjackFile().getString(player.getUniqueId().toString()+".Cards.Card" +p2count +".Data"))));
 			p2.setItemMeta(meta);
 		}
 
@@ -244,18 +250,24 @@ public class BlackjackGame implements Listener{
 		i.setItem(35, playerTotal);
 
 		//Player functions
-		final ItemStack hit = new ItemStack(Material.GOLD_PLATE, 1);{
+		ItemStack hit = new ItemStack(Material.GOLD_PLATE, 1);{
 			ItemMeta meta = hit.getItemMeta();
 			meta.setDisplayName(Utils.chat("&6Hit"));
 			hit.setItemMeta(meta);
 		}
-		final ItemStack stand = new ItemStack(Material.BREWING_STAND_ITEM, 1);{
+		ItemStack stand = new ItemStack(Material.BREWING_STAND_ITEM, 1);{
 			ItemMeta meta = stand.getItemMeta();
 			meta.setDisplayName(Utils.chat("&6Stand"));
 			stand.setItemMeta(meta);
 		}
+		ItemStack doubleDown = new ItemStack(Material.HOPPER, 2);{
+			ItemMeta meta = doubleDown.getItemMeta();
+			meta.setDisplayName(Utils.chat("&6Double Down"));
+			doubleDown.setItemMeta(meta);
+		}
 
 		player.openInventory(i);
+
 
 		//Player's first card
 		new BukkitRunnable() {
@@ -264,13 +276,14 @@ public class BlackjackGame implements Listener{
 				//Set cards
 				i.setItem(31, p1);
 				//Set totals
-				FileConfig.getBlackjackFile().set(player.getUniqueId().toString()+".PlayerTotal", Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card1.Data")}));
+				FileConfig.getBlackjackFile().set(player.getUniqueId().toString()+".PlayerTotal", Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card" +p1count +".Data")}));
 				FileConfig.saveBlackjack();
 				ItemStack playerTotal = new ItemStack(Material.MINECART, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".PlayerTotal"));{
 					ItemMeta meta = playerTotal.getItemMeta();
 					meta.setDisplayName(Utils.chat("&DTotal"));
 					playerTotal.setItemMeta(meta);
 				}
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BASEDRUM, 1, 0);
 				i.setItem(35, playerTotal);
 			}
 
@@ -286,7 +299,7 @@ public class BlackjackGame implements Listener{
 				i.setItem(4, d1);
 
 				//Set totals
-				int dealerTotalNum = Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card2.Data")});
+				int dealerTotalNum = Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card" +d1count +".Data")});
 				FileConfig.getBlackjackFile().set(player.getUniqueId().toString()+".DealerTotal", dealerTotalNum);
 				FileConfig.saveBlackjack();
 				ItemStack dealerTotal = new ItemStack(Material.MINECART, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".DealerTotal"));{
@@ -294,6 +307,7 @@ public class BlackjackGame implements Listener{
 					meta.setDisplayName(Utils.chat("&DTotal"));
 					dealerTotal.setItemMeta(meta);
 				}
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BASEDRUM, 1, 0);
 				i.setItem(8, dealerTotal);
 			}
 
@@ -308,9 +322,10 @@ public class BlackjackGame implements Listener{
 				//Set cards
 				i.setItem(30, i.getItem(31));
 				i.setItem(31, p2);
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BASEDRUM, 1, 0);
 
 				//Set card totals
-				int playerTotalNum = Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card1.Data"), FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card3.Data")});
+				int playerTotalNum = Blackjack.cardTotal(new String[]{FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card" +p1count +".Data"), FileConfig.getBlackjackFile().getString(player.getUniqueId().toString() +".Cards.Card" +p2count +".Data")});
 				FileConfig.getBlackjackFile().set(player.getUniqueId().toString()+".PlayerTotal", playerTotalNum);
 				FileConfig.saveBlackjack();
 				ItemStack playerTotal = new ItemStack(Material.MINECART, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".PlayerTotal"));{
@@ -319,16 +334,36 @@ public class BlackjackGame implements Listener{
 					playerTotal.setItemMeta(meta);
 				}
 				i.setItem(35, playerTotal);
+
+				//Alternate total
+				ItemStack altPlayerTotal = new ItemStack(Material.MINECART, FileConfig.getBlackjackFile().getInt(player.getUniqueId().toString() +".AltPlayerTotal"));{
+					ItemMeta meta = altPlayerTotal.getItemMeta();
+					meta.setDisplayName(Utils.chat("&DAlternate Total"));
+					altPlayerTotal.setItemMeta(meta);
+				}
+				i.setItem(44, altPlayerTotal);
+
+				if(!i.contains(altPlayerTotal)){
+					i.setItem(44, empty2);
+				}
+
 				player.updateInventory();
 
 				//Set hit and stand buttons
 				i.setItem(48, hit);
 				i.setItem(50, stand);
 
+				//Double down button
+				if(FileConfig.getBlackjackFile().getBoolean(player.getUniqueId().toString() +".DoubleDown")){
+					i.setItem(49, doubleDown);
+				}
+
 			}
 
 		}.runTaskLater(plugin, 30);
+
 		player.openInventory(i);
+
 	}
 
 }
