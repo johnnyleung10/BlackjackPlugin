@@ -1,7 +1,7 @@
 # Blackjack Plugin
 
 ## About
-A Minecraft version of Blackjack played straight from the inventory. Features a live chip betting system, a customizable dealer, and more.
+A Minecraft version of Blackjack played straight from the inventory. Features a live chip betting system, a customizable dealer, and more. https://www.spigotmc.org/resources/blackjack-overdrive.72121/
 
 ## Installing
 Take the provided "BlackjackPlugin.jar" and place it in the "/plugins" folder and the rest is automatic. Make sure you have the required plugins under "Dependencies". If you wish to do custom configuration changes, see "Configuration".
